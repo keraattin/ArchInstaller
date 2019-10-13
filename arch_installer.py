@@ -63,7 +63,10 @@ def auto_partitioning():
 #Disk partitioning function
 def disk_partitioning():
     selection = input("1-Auto Partitioning, 2-Manuel Partitioning\nSelection [1/2] : ")
-    if selection == 1:
+    if selection == '1':
+        auto_partitioning()
+    elif selection == '2':
+        manuel_partitioning()
 
 
 

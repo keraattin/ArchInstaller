@@ -30,8 +30,8 @@ def welcome():
     to_continue = input("Press any key to continue..")
     os.system("clear")
 
-#Disk partitioning function
-def disk_partitioning():
+
+def manuel_partitioning():
     os.system("cfdisk")
     os.system("clear")
     os.system("lsblk")
@@ -41,6 +41,31 @@ def disk_partitioning():
         return
     else:
         disk_partitioning()
+
+
+def uefi_partitioning():
+    os.system("parted /dev/sda mklabel gpt --script")
+
+def dos_partitioning():
+    os.system("parted /dev/sda mklabel msdos --script")
+
+def auto_partitioning():
+    selection = input("1-UEFI (new) ,2-DOS (old) \nSelection [1/2] :")
+    if selection == '1':
+        uefi_partitioning()
+    elif selection == '2':
+        dos_partitioning()
+    else:
+        os.system("clear")
+        print(RED+"Wrong Selection"+DEFAULT)
+
+
+#Disk partitioning function
+def disk_partitioning():
+    selection = input("1-Auto Partitioning, 2-Manuel Partitioning\nSelection [1/2] : ")
+    if selection == 1:
+
+
 
 
 def main():

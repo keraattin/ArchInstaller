@@ -56,6 +56,7 @@ def uefi_partitioning():
     else:
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
+
     boot_size = input("Insert /boot partition size [M/MiB - G/GiB] : ")
     if boot_size.find('M') != -1 or boot_size.find('MiB') != -1:
         found_point = boot_size.find('M')
@@ -68,15 +69,32 @@ def uefi_partitioning():
     else:
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
-    swap_size = input("Insert swap partition size [M/MiB - G/GiB] : ")
 
-    print("efi_part_size : "+str(efi_part_size))
-    print("efi_part_type : "+str(efi_part_type))
-    print("boot_part_size : "+str(boot_part_size))
-    print("boot_part_type : "+str(boot_part_type))
-    #os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
-    #os.system("parted /dev/sda mkpart primary fat32 1M {} set 1 esp on --script".format(efi_size))
-    #os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(efi_size,)
+    swap_size = input("Insert swap partition size [M/MiB - G/GiB] : ")
+    if swap_size.find('M') != -1 or swap_size.find('MiB') != -1:
+        found_point = swap_size.find('M')
+        swap_part_size = swap_size[:found_point]
+        sawp_part_type = swap_size[found_point:]
+    elif swap_size.find('G') != -1 or swap_size.find('GiB') != -1:
+        found_point = swap_size.find('G')
+        swap_part_size = swap_size[:found_point]
+        swap_part_type = swap_size[found_point:]
+    else:
+        print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
+        uefi_partitioning() #If wrong format entered, call again itself
+
+
+    boot_start = efi_part_size
+    boot_end = efi_part_size + boot_part_size
+    swap_start = boot_end
+    swap_end = boot_end + swap_part_size
+    root_start = swap_end
+    os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+    os.system("parted /dev/sda mkpart primary fat32 1M {} set 1 esp on --script".format(efi_part_size))
+    os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(boot_start,boot_end))
+    os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
+    os.system("parted /dev/sda mkpart primary ext4 {} 100% --script".format(root_start))
+
 
 def dos_partitioning():
     #os.system("parted /dev/sda mklabel msdos --script") #Making label to msdos

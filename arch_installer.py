@@ -45,7 +45,7 @@ def manual_partitioning():
 
 def uefi_partitioning():
     efi_size = input("Insert EFI partition size [M/MiB - G/GiB] : ")
-    if efi_size.find('M') != -1 or efi_size.find('MiB'):
+    if efi_size.find('M') != -1 or efi_size.find('MiB') != -1:
         found_point = efi_size.find('M')
         efi_part_size = efi_size[:found_point]
         efi_part_type = efi_size[found_point:]
@@ -95,7 +95,7 @@ def uefi_partitioning():
     if swap_size.find('M') != -1 or swap_size.find('MiB') != -1:
         found_point = swap_size.find('M')
         swap_part_size = swap_size[:found_point]
-        sawp_part_type = swap_size[found_point:]
+        swap_part_type = swap_size[found_point:]
         if swap_part_type == 'M' or swap_part_type == 'MiB':
             print(GREEN+"[OK]"+DEFAULT)
         else:
@@ -120,11 +120,11 @@ def uefi_partitioning():
     swap_start = boot_end
     swap_end = boot_end + swap_part_size
     root_start = swap_end
-    os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
-    os.system("parted /dev/sda mkpart primary fat32 1M {} set 1 esp on --script".format(str(efi_part_size)+efi_part_type))
-    os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(str(boot_start)+boot_part_type,str(boot_end)+boot_part_type))
-    os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
-    os.system("parted /dev/sda mkpart primary ext4 {} 100% --script".format(root_start))
+    #os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+    #os.system("parted /dev/sda mkpart primary fat32 1M {} set 1 esp on --script".format(str(efi_part_size)+efi_part_type))
+    #os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(str(boot_start)+boot_part_type,str(boot_end)+boot_part_type))
+    #os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
+    #os.system("parted /dev/sda mkpart primary ext4 {} 100% --script".format(root_start))
 
 
 def dos_partitioning():

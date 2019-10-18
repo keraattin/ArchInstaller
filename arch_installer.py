@@ -2,6 +2,7 @@
 
 import os
 import sys
+import math
 
 
 #Colors
@@ -115,15 +116,38 @@ def uefi_partitioning():
         uefi_partitioning() #If wrong format entered, call again itself
 
 
-    boot_start = efi_part_size
-    boot_end = efi_part_size + boot_part_size
-    swap_start = boot_end
-    swap_end = boot_end + swap_part_size
-    root_start = swap_end
-    #os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
-    #os.system("parted /dev/sda mkpart primary fat32 1M {} set 1 esp on --script".format(str(efi_part_size)+efi_part_type))
-    #os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(str(boot_start)+boot_part_type,str(boot_end)+boot_part_type))
-    #os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
+    if efi_part_type == 'M' or efi_part_type == 'MiB':
+        efi_start = 2048
+        efi_end = efi_start + int((int(efi_part_size)*(math.pow(2,20)))/512)
+    elif boot_part_type == 'G' or boot_part_type == 'GiB':
+        efi_start = 2048
+        efi_end = efi_start + int((int(efi_part_size)*(math.pow(2,30)))/512)
+
+    if boot_part_type == 'M' or boot_part_type == 'MiB':
+        boot_start = efi_end + 1
+        boot_end = boot_start + int((int(boot_part_size)*(math.pow(2,20)))/512)
+    elif boot_part_type == 'G' or boot_part_type == 'GiB':
+        boot_start = efi_end + 1
+        boot_end = boot_start + int((int(boot_part_size)*(math.pow(2,30)))/512)
+
+    if swap_part_type == 'M' or swap_part_type == 'MiB':
+        swap_start = boot_end + 1
+        swap_end = swap_start + int((int(swap_part_size)*(math.pow(2,20)))/512)
+    elif swap_part_type == 'G' or swap_part_type == 'GiB':
+        swap_start = boot_end + 1
+        swap_end = swap_start + int((int(swap_part_size)*(math.pow(2,30)))/512)
+
+
+    print("Efi start : 2048")
+    print("Efi end : " + str(efi_end))
+    print("Boot start : " + str(boot_start))
+    print("Boot end : " + str(boot_end))
+    print("Swap start : " + str(swap_start))
+    print("Swap end : " + str(swap_end))
+    os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+    os.system("parted /dev/sda mkpart primary fat32 {} {} set 1 esp on --script".format(efi_start,efi_end))
+    os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(boot_start,boot_end))
+    os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
     #os.system("parted /dev/sda mkpart primary ext4 {} 100% --script".format(root_start))
 
 

@@ -97,6 +97,8 @@ def uefi_partitioning():
         found_point = swap_size.find('M')
         swap_part_size = swap_size[:found_point]
         swap_part_type = swap_size[found_point:]
+        #efi_start = 1
+        #efi_end = efi_start + swap_part_size
         if swap_part_type == 'M' or swap_part_type == 'MiB':
             print(GREEN+"[OK]"+DEFAULT)
         else:
@@ -106,6 +108,8 @@ def uefi_partitioning():
         found_point = swap_size.find('G')
         swap_part_size = swap_size[:found_point]
         swap_part_type = swap_size[found_point:]
+        #efi_start = 1
+        #efi_end = efi_start + (swap_part_size*1024)
         if swap_part_type == 'G' or swap_part_type == 'GiB':
             print(GREEN+"[OK]"+DEFAULT)
         else:
@@ -117,37 +121,52 @@ def uefi_partitioning():
 
 
     if efi_part_type == 'M' or efi_part_type == 'MiB':
-        efi_start = 2048
-        efi_end = efi_start + int((int(efi_part_size)*(math.pow(2,20)))/512)
+        efi_sector_start = 2048
+        efi_sector_end = efi_sector_start + int((int(efi_part_size)*(math.pow(2,20)))/512)
+        efi_sector = int((int(efi_part_size)*(math.pow(2,20)))/512)
+        efi_part_start = 1
+        efi_part_end = efi_part_size
     elif boot_part_type == 'G' or boot_part_type == 'GiB':
-        efi_start = 2048
-        efi_end = efi_start + int((int(efi_part_size)*(math.pow(2,30)))/512)
+        efi_sector_start = 2048
+        efi_sector_end = efi_sector_start + int((int(efi_part_size)*(math.pow(2,30)))/512)
+        efi_sector = int((int(efi_part_size)*(math.pow(2,30)))/512)
+        efi_part_start = 1
+        efi_part_end = int(efi_part_size * 1024)
 
     if boot_part_type == 'M' or boot_part_type == 'MiB':
-        boot_start = efi_end + 1
-        boot_end = boot_start + int((int(boot_part_size)*(math.pow(2,20)))/512)
+        boot_sector_start = efi_sector_end + 1
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*(math.pow(2,20)))/512)
+        boot_sector = int((int(boot_part_size)*(math.pow(2,20)))/512)
+        boot_part_start = efi_part_end
+        boot_part_end = boot_part_start + boot_part_size
     elif boot_part_type == 'G' or boot_part_type == 'GiB':
-        boot_start = efi_end + 1
-        boot_end = boot_start + int((int(boot_part_size)*(math.pow(2,30)))/512)
+        boot_sector_start = efi_sector_end + 1
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*(math.pow(2,30)))/512)
+        boot_sector = int((int(boot_part_size)*(math.pow(2,30)))/512)
+        boot_part_start = efi_part_end
+        boot_part_end = boot_part_start + int(boot_part_size*1024)
 
     if swap_part_type == 'M' or swap_part_type == 'MiB':
-        swap_start = boot_end + 1
-        swap_end = swap_start + int((int(swap_part_size)*(math.pow(2,20)))/512)
+        swap_sector_start = boot_sector_end + 1
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*(math.pow(2,20)))/512)
+        swap_sector = int((int(swap_part_size)*(math.pow(2,20)))/512)
+        swap_part_start = boot_part_end
+        swap_part_end = swap_part_start + swap_part_size
     elif swap_part_type == 'G' or swap_part_type == 'GiB':
-        swap_start = boot_end + 1
-        swap_end = swap_start + int((int(swap_part_size)*(math.pow(2,30)))/512)
+        swap_sector_start = boot_sector_end + 1
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*(math.pow(2,30)))/512)
+        swap_sector = int((int(swap_part_size)*(math.pow(2,30)))/512)
+        swap_part_start = boot_part_end
+        swap_part_end = swap_part_start + int(swap_part_size*1024)
 
-
-    print("Efi start : 2048")
-    print("Efi end : " + str(efi_end))
-    print("Boot start : " + str(boot_start))
-    print("Boot end : " + str(boot_end))
-    print("Swap start : " + str(swap_start))
-    print("Swap end : " + str(swap_end))
-    os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
-    os.system("parted /dev/sda mkpart primary fat32 {} {} set 1 esp on --script".format(efi_start,efi_end))
-    os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(boot_start,boot_end))
-    os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
+    print("\t\tStart\tStop\tSector Start\tSector End\tSector")
+    print("Efi"+str(efi_part_start)+"\t"+str(efi_part_end)+"\t"+str(efi_sector_start)+"\t"+str(efi_sector_end)+"\t"+str(efi_sector))
+    print("Boot"+str(boot_part_start)+"\t"+str(boot_part_end)+"\t"+str(boot_sector_start)+"\t"+str(boot_sector_end)+"\t"+str(boot_sector))
+    print("Efi"+str(swap_part_start)+"\t"+str(swap_part_end)+"\t"+str(swap_sector_start)+"\t"+str(swap_sector_end)+"\t"+str(swap_sector))
+    #os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+    #os.system("parted /dev/sda mkpart primary fat32 {} {} set 1 esp on --script".format(efi_start,efi_end))
+    #os.system("parted /dev/sda mkpart primary ext2 {} {} --script".format(boot_start,boot_end))
+    #os.system("parted /dev/sda mkpart primary linux-swap {} {} --script".format(swap_start,swap_end))
     #os.system("parted /dev/sda mkpart primary ext4 {} 100% --script".format(root_start))
 
 

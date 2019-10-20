@@ -53,12 +53,13 @@ def manual_partitioning():
 
 
 def uefi_partitioning():
+    os.system("clear")
     efi_size = input("Insert EFI partition size [M/MiB - G/GiB] : ")
     if efi_size.find('M') != -1 or efi_size.find('MiB') != -1:
         found_point = efi_size.find('M')
         efi_part_size = int(efi_size[:found_point])
         efi_part_type = efi_size[found_point:]
-        efi_sector_start = 2048
+        efi_sector_start = 2048 #First sector
         efi_sector_end = efi_sector_start + int((int(efi_part_size)*MEGABYTE)/SECTOR_SIZE)
         efi_sector = int((int(efi_part_size)*MEGABYTE)/SECTOR_SIZE)
         efi_part_start = 1
@@ -67,12 +68,12 @@ def uefi_partitioning():
             print(GREEN+"[OK]"+DEFAULT)
         else:
             print(RED+"Wrong format!"+DEFAULT)
-            uefi_partitioning()
+            uefi_partitioning() #If wrong format entered, call again itself
     elif efi_size.find('G') != -1 or efi_size.find('GiB') != -1:
         found_point = efi_size.find('G')
         efi_part_size = int(efi_size[:found_point])
         efi_part_type = efi_size[found_point:]
-        efi_sector_start = 2048
+        efi_sector_start = 2048 #First sector
         efi_sector_end = efi_sector_start + int((int(efi_part_size)*GIGABYTE)/SECTOR_SIZE)
         efi_sector = int((int(efi_part_size)*GIGABYTE)/SECTOR_SIZE)
         efi_part_start = 1
@@ -81,8 +82,7 @@ def uefi_partitioning():
             print(GREEN+"[OK]"+DEFAULT)
         else:
             print(RED+"Wrong format!"+DEFAULT)
-            print(efi_part_type)
-            uefi_partitioning()
+            uefi_partitioning() #If wrong format entered, call again itself
     else:
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
@@ -101,7 +101,7 @@ def uefi_partitioning():
             print(GREEN+"[OK]"+DEFAULT)
         else:
             print(RED+"Wrong format!"+DEFAULT)
-            uefi_partitioning()
+            uefi_partitioning() #If wrong format entered, call again itself
     elif boot_size.find('G') != -1 or boot_size.find('GiB') != -1:
         found_point = boot_size.find('G')
         boot_part_size = int(boot_size[:found_point])
@@ -115,7 +115,7 @@ def uefi_partitioning():
             print(GREEN+"[OK]"+DEFAULT)
         else:
             print(RED+"Wrong format!"+DEFAULT)
-            uefi_partitioning()
+            uefi_partitioning() #If wrong format entered, call again itself
     else:
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
@@ -134,7 +134,7 @@ def uefi_partitioning():
             print(GREEN+"[OK]"+DEFAULT)
         else:
             print(RED+"Wrong format!"+DEFAULT)
-            uefi_partitioning()
+            uefi_partitioning() #If wrong format entered, call again itself
     elif swap_size.find('G') != -1 or swap_size.find('GiB') != -1:
         found_point = swap_size.find('G')
         swap_part_size = int(swap_size[:found_point])
@@ -158,11 +158,22 @@ def uefi_partitioning():
     print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Efi",str(efi_part_start),str(efi_part_end),str(efi_sector_start),str(efi_sector_end),str(efi_sector)))
     print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Boot",str(boot_part_start),str(boot_part_end),str(boot_sector_start),str(boot_sector_end),str(boot_sector)))
     print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Swap",str(swap_part_start),str(swap_part_end),str(swap_sector_start),str(swap_sector_end),str(swap_sector)))
-    os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
-    os.system("parted /dev/sda mkpart primary fat32 {}M {}M set 1 esp on --script".format(efi_part_start,efi_part_end))
-    os.system("parted /dev/sda mkpart primary ext2 {}M {}M --script".format(boot_part_start,boot_part_end))
-    os.system("parted /dev/sda mkpart primary linux-swap {}M {}M --script".format(swap_part_start,swap_part_end))
-    os.system("parted /dev/sda mkpart primary ext4 {}M 100% --script".format(swap_part_end))
+
+    response = input("Are you sure about this configuration? [Y/n]")
+    if response == 'Y' or response == 'y' or response == '':
+        os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+        os.system("parted /dev/sda mkpart primary fat32 {}M {}M set 1 esp on --script".format(efi_part_start,efi_part_end)) #Creating efi partition
+        os.system("parted /dev/sda mkpart primary ext2 {}M {}M --script".format(boot_part_start,boot_part_end)) #Creating boot partition
+        os.system("parted /dev/sda mkpart primary linux-swap {}M {}M --script".format(swap_part_start,swap_part_end)) #Creating swap partition
+        os.system("parted /dev/sda mkpart primary ext4 {}M 100% --script".format(swap_part_end)) #Creating root partition
+
+        #Formatting partitions
+        os.system("mkfs.vfat -F32 /dev/sda1")
+        os.system("mkfs.ext2 /dev/sda2")
+        os.system("mkswap /dev/sda3")
+        os.system("mkfs.ext4 /dev/sda4")
+    else:
+        disk_partitioning()
 
 
 def dos_partitioning():

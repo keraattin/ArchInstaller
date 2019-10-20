@@ -59,8 +59,8 @@ def uefi_partitioning():
         efi_part_size = int(efi_size[:found_point])
         efi_part_type = efi_size[found_point:]
         efi_sector_start = 2048
-        efi_sector_end = efi_sector_start + int((int(efi_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
-        efi_sector = int((int(efi_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
+        efi_sector_end = efi_sector_start + int((int(efi_part_size)*MEGABYTE)/SECTOR_SIZE)
+        efi_sector = int((int(efi_part_size)*MEGABYTE)/SECTOR_SIZE)
         efi_part_start = 1
         efi_part_end = efi_part_size
         if efi_part_type == 'M' or efi_part_type == 'MiB':
@@ -73,8 +73,8 @@ def uefi_partitioning():
         efi_part_size = int(efi_size[:found_point])
         efi_part_type = efi_size[found_point:]
         efi_sector_start = 2048
-        efi_sector_end = efi_sector_start + int((int(efi_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
-        efi_sector = int((int(efi_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
+        efi_sector_end = efi_sector_start + int((int(efi_part_size)*GIGABYTE)/SECTOR_SIZE)
+        efi_sector = int((int(efi_part_size)*GIGABYTE)/SECTOR_SIZE)
         efi_part_start = 1
         efi_part_end = int(efi_part_size * 1024)
         if efi_part_type == 'G' or efi_part_type == 'GiB':
@@ -93,8 +93,8 @@ def uefi_partitioning():
         boot_part_size = int(boot_size[:found_point])
         boot_part_type = boot_size[found_point:]
         boot_sector_start = efi_sector_end + 1
-        boot_sector_end = boot_sector_start + int((int(boot_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
-        boot_sector = int((int(boot_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*MEGABYTE)/SECTOR_SIZE)
+        boot_sector = int((int(boot_part_size)*MEGABYTE)/SECTOR_SIZE)
         boot_part_start = efi_part_end
         boot_part_end = boot_part_start + boot_part_size
         if boot_part_type == 'M' or boot_part_type == 'MiB':
@@ -107,8 +107,8 @@ def uefi_partitioning():
         boot_part_size = int(boot_size[:found_point])
         boot_part_type = boot_size[found_point:]
         boot_sector_start = efi_sector_end + 1
-        boot_sector_end = boot_sector_start + int((int(boot_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
-        boot_sector = int((int(boot_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*GIGABYTE)/SECTOR_SIZE)
+        boot_sector = int((int(boot_part_size)*GIGABYTE)/SECTOR_SIZE)
         boot_part_start = efi_part_end
         boot_part_end = boot_part_start + int(boot_part_size*1024)
         if boot_part_type == 'G' or boot_part_type == 'GiB':
@@ -126,8 +126,8 @@ def uefi_partitioning():
         swap_part_size = int(swap_size[:found_point])
         swap_part_type = swap_size[found_point:]
         swap_sector_start = boot_sector_end + 1
-        swap_sector_end = swap_sector_start + int((int(swap_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
-        swap_sector = int((int(swap_part_size)*(math.pow(2,20)))/SECTOR_SIZE)
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*MEGABYTE)/SECTOR_SIZE)
+        swap_sector = int((int(swap_part_size)*MEGABYTE)/SECTOR_SIZE)
         swap_part_start = boot_part_end
         swap_part_end = swap_part_start + swap_part_size
         if swap_part_type == 'M' or swap_part_type == 'MiB':
@@ -140,8 +140,8 @@ def uefi_partitioning():
         swap_part_size = int(swap_size[:found_point])
         swap_part_type = swap_size[found_point:]
         swap_sector_start = boot_sector_end + 1
-        swap_sector_end = swap_sector_start + int((int(swap_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
-        swap_sector = int((int(swap_part_size)*(math.pow(2,30)))/SECTOR_SIZE)
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*GIGABYTE)/SECTOR_SIZE)
+        swap_sector = int((int(swap_part_size)*GIGABYTE)/SECTOR_SIZE)
         swap_part_start = boot_part_end
         swap_part_end = swap_part_start + int(swap_part_size*1024)
         if swap_part_type == 'G' or swap_part_type == 'GiB':

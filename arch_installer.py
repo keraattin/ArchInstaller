@@ -200,8 +200,14 @@ def disk_partitioning():
     elif selection == '2':
         manual_partitioning()
 
-
-
+#Mounting disk volumes to /mnt
+def mount_volume():
+    os.system("mount /dev/sda4 /mnt")
+    os.system("mkdir /mnt/boot")
+    os.system("mount /dev/sda2 /mnt/boot")
+    os.system("mkdir /mnt/boot/efi")
+    os.system("mount /dev/sda1 /mnt/boot/efi")
+    os.system("swapon /dev/sda3")
 
 def main():
     if os.geteuid() != 0:   #Check whether user have root privileges or not

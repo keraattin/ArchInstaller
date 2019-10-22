@@ -192,14 +192,6 @@ def auto_partitioning():
         auto_partitioning()
 
 
-#Disk partitioning function
-def disk_partitioning():
-    selection = input("1-Auto Partitioning, 2-Manual Partitioning\nSelection [1/2] : ")
-    if selection == '1':
-        auto_partitioning()
-    elif selection == '2':
-        manual_partitioning()
-
 #Mounting disk volumes to /mnt
 def mount_volume():
     os.system("mount /dev/sda4 /mnt")
@@ -208,6 +200,19 @@ def mount_volume():
     os.system("mkdir /mnt/boot/efi")
     os.system("mount /dev/sda1 /mnt/boot/efi")
     os.system("swapon /dev/sda3")
+
+#Installing base packages to /mnt
+def install_necessarily_packages():
+    os.system("pacstrap -i /mnt base base-devel grub os-prober")
+
+#Disk partitioning function
+def disk_partitioning():
+    selection = input("1-Auto Partitioning, 2-Manual Partitioning\nSelection [1/2] : ")
+    if selection == '1':
+        auto_partitioning()
+    elif selection == '2':
+        manual_partitioning()
+
 
 def main():
     if os.geteuid() != 0:   #Check whether user have root privileges or not

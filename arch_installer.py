@@ -205,6 +205,10 @@ def mount_volume():
 def install_necessarily_packages():
     os.system("pacstrap -i /mnt base base-devel grub os-prober")
 
+#Generating fstab file for mounted volumes
+def generate_fstab():
+    os.system("genfstab -U -p >> /mnt >> /mnt/etc/fstab")
+
 #Disk partitioning function
 def disk_partitioning():
     selection = input("1-Auto Partitioning, 2-Manual Partitioning\nSelection [1/2] : ")
@@ -220,6 +224,8 @@ def main():
         sys.exit(1)
     welcome()
     disk_partitioning()
+    install_necessarily_packages()
+    generate_fstab()
 
 if __name__ == '__main__':
     main()

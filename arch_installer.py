@@ -168,10 +168,10 @@ def uefi_partitioning():
         os.system("parted /dev/sda mkpart primary ext4 {}M 100% --script".format(swap_part_end)) #Creating root partition
 
         #Formatting partitions
-        os.system("mkfs.vfat -F32 /dev/sda1")
-        os.system("mkfs.ext2 /dev/sda2")
-        os.system("mkswap /dev/sda3")
-        os.system("mkfs.ext4 /dev/sda4")
+        os.system("yes | mkfs.vfat -F32 /dev/sda1")
+        os.system("yes | mkfs.ext2 /dev/sda2")
+        os.system("yes | mkswap /dev/sda3")
+        os.system("yes | mkfs.ext4 /dev/sda4")
     else:
         disk_partitioning()
 
@@ -203,7 +203,7 @@ def mount_volume():
 
 #Installing base packages to /mnt
 def install_necessarily_packages():
-    os.system("pacstrap -i /mnt base base-devel grub os-prober")
+    os.system("pacstrap /mnt base base-devel grub os-prober")
 
 #Generating fstab file for mounted volumes
 def generate_fstab():
@@ -224,6 +224,7 @@ def main():
         sys.exit(1)
     welcome()
     disk_partitioning()
+    mount_volume()
     install_necessarily_packages()
     generate_fstab()
 

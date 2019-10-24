@@ -10,6 +10,7 @@ DEFAULT = "\33[37m"
 GREEN = "\33[32m"
 RED = "\33[31m"
 CYAN = "\33[36m"
+MAGENTA = "\33[35m"
 
 #Consts
 SECTOR_SIZE = 512   #1 sector 512Byte
@@ -181,11 +182,39 @@ def dos_partitioning():
     print("auto")
 
 def auto_partitioning():
-    selection = input("1-UEFI (new) ,2-DOS (old) \nSelection [1/2] :")
+    os.system("clear")
+    print("Auto Partitioning...\n")
+    selection = input("1-UEFI (new systems)\n\n2-DOS (old systems)\n\n3-Back\n\nSelection [1/2/3] : ")
     if selection == '1':
-        uefi_partitioning()
+        os.system("clear")
+        print("Auto Partitioning -> UEFI")
+        prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided UEFI Installation\n\n3-Back\n\nSelection[1/2/3] : ")
+        if prompt == '1':
+            print()
+        elif prompt == '2':
+            uefi_partitioning()
+        elif prompt == '3':
+            auto_partitioning()
+        else:
+            os.system("clear")
+            print(RED+"Wrong Selection"+DEFAULT)
+            auto_partitioning()
     elif selection == '2':
-        dos_partitioning()
+        os.system("clear")
+        print("Auto Partitioning -> UEFI")
+        prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided DOS Installation\n\n3-Back\n\nSelection[1/2/3] : ")
+        if prompt == '1':
+            print()
+        elif prompt == '2':
+            dos_partitioning()
+        elif prompt == '3':
+            auto_partitioning()
+        else:
+            os.system("clear")
+            print(RED+"Wrong Selection"+DEFAULT)
+            auto_partitioning()
+    elif selection == '3':
+        disk_partitioning()
     else:
         os.system("clear")
         print(RED+"Wrong Selection"+DEFAULT)
@@ -211,11 +240,17 @@ def generate_fstab():
 
 #Disk partitioning function
 def disk_partitioning():
-    selection = input("1-Auto Partitioning, 2-Manual Partitioning\nSelection [1/2] : ")
+    os.system("clear")
+    selection = input("1-Auto Partitioning\n\n2-Manual Partitioning\n\n3-Exit\n\nSelection [1/2/3] : ")
     if selection == '1':
         auto_partitioning()
     elif selection == '2':
         manual_partitioning()
+    elif selection == '3':
+        sys.exit(1)
+    else:
+        print(RED+"Wrong Selection"+DEFAULT)
+        disk_partitioning()
 
 
 def main():

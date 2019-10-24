@@ -17,6 +17,9 @@ SECTOR_SIZE = 512   #1 sector 512Byte
 MEGABYTE = math.pow(2,20)
 GIGABYTE = math.pow(2,30)
 
+#User Informations
+USERNAME = ""
+PASSWORD = ""
 
 #Welcome message function
 def welcome():
@@ -154,7 +157,6 @@ def uefi_partitioning():
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
 
-
     print(CYAN+"{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Type","Start","Stop","Start Sector","End Sector","Sector"+DEFAULT))
     print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Efi",str(efi_part_start),str(efi_part_end),str(efi_sector_start),str(efi_sector_end),str(efi_sector)))
     print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Boot",str(boot_part_start),str(boot_part_end),str(boot_sector_start),str(boot_sector_end),str(boot_sector)))
@@ -229,6 +231,13 @@ def mount_volume():
     os.system("mkdir /mnt/boot/efi")
     os.system("mount /dev/sda1 /mnt/boot/efi")
     os.system("swapon /dev/sda3")
+
+#Getting new user credentials from user
+def get_user_informations():
+    os.system("clear")
+    print("User Informations")
+    USERNAME = input("\nUsername : ")
+    PASSWORD = input("\nPassword : ")
 
 #Installing base packages to /mnt
 def install_necessarily_packages():

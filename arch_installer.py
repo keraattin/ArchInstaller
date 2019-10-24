@@ -18,6 +18,7 @@ MEGABYTE = math.pow(2,20)
 GIGABYTE = math.pow(2,30)
 
 #User Informations
+HOSTNAME = ""
 USERNAME = ""
 PASSWORD = ""
 
@@ -236,6 +237,7 @@ def mount_volume():
 def get_user_informations():
     os.system("clear")
     print("User Informations")
+    HOSTNAME = input("\nHostname : ")
     USERNAME = input("\nUsername : ")
     PASSWORD = input("\nPassword : ")
 
@@ -246,6 +248,10 @@ def install_necessarily_packages():
 #Generating fstab file for mounted volumes
 def generate_fstab():
     os.system("genfstab -U -p >> /mnt >> /mnt/etc/fstab")
+
+#Becoming the root on /mnt
+def change_root():
+    os.system("arch-chroot /mnt /bin/bash")
 
 #Disk partitioning function
 def disk_partitioning():
@@ -269,8 +275,10 @@ def main():
     welcome()
     disk_partitioning()
     mount_volume()
+    get_user_informations()
     install_necessarily_packages()
     generate_fstab()
+    change_root()
 
 if __name__ == '__main__':
     main()

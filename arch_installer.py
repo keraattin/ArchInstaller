@@ -190,7 +190,7 @@ def auto_partitioning():
     selection = input("1-UEFI (new systems)\n\n2-DOS (old systems)\n\n3-Back\n\nSelection [1/2/3] : ")
     if selection == '1':
         os.system("clear")
-        print("Auto Partitioning -> UEFI")
+        print("Auto Partitioning -> UEFI\n")
         prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided UEFI Installation\n\n3-Back\n\nSelection[1/2/3] : ")
         if prompt == '1':
             print()
@@ -204,7 +204,7 @@ def auto_partitioning():
             auto_partitioning()
     elif selection == '2':
         os.system("clear")
-        print("Auto Partitioning -> UEFI")
+        print("Auto Partitioning -> DOS\n")
         prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided DOS Installation\n\n3-Back\n\nSelection[1/2/3] : ")
         if prompt == '1':
             print()
@@ -253,6 +253,10 @@ def generate_fstab():
 def change_root():
     os.system("arch-chroot /mnt /bin/bash")
 
+# Setting hostname
+def set_hostname():
+    os.system("echo {} > /etc/hostname".format(HOSTNAME))
+
 #Disk partitioning function
 def disk_partitioning():
     os.system("clear")
@@ -279,6 +283,7 @@ def main():
     install_necessarily_packages()
     generate_fstab()
     change_root()
+    set_hostname()
 
 if __name__ == '__main__':
     main()

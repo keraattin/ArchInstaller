@@ -254,6 +254,11 @@ def create_user():
     os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
     print(GREEN+"User {} created successfully."+DEFAULT)
 
+#Setting password for new user
+def set_password():
+    os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
+    print(GREEN+"New password created successfully."+DEFAULT)
+
 #Installing base packages to /mnt
 def install_necessarily_packages():
     os.system("pacstrap /mnt base base-devel grub os-prober")
@@ -298,6 +303,8 @@ def main():
     change_root()
     set_root_password()
     set_hostname()
+    create_user()
+    set_password()
 
 if __name__ == '__main__':
     main()

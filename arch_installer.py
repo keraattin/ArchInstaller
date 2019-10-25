@@ -247,6 +247,13 @@ def get_user_informations():
     USERNAME = input("\nUsername : ")
     PASSWORD = input("\nPassword : ")
 
+#Creating new user
+def create_user():
+    os.system("clear")
+    print("Creating user {}".format(USERNAME))
+    os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
+    print(GREEN+"User {} created successfully."+DEFAULT)
+
 #Installing base packages to /mnt
 def install_necessarily_packages():
     os.system("pacstrap /mnt base base-devel grub os-prober")

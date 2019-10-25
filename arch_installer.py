@@ -233,6 +233,12 @@ def mount_volume():
     os.system("mount /dev/sda1 /mnt/boot/efi")
     os.system("swapon /dev/sda3")
 
+#Setting new password for root
+def set_root_password():
+    os.system("clear")
+    root_password = input("\nPlease enter the root password")
+    os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
+
 #Getting new user credentials from user
 def get_user_informations():
     os.system("clear")
@@ -283,6 +289,7 @@ def main():
     install_necessarily_packages()
     generate_fstab()
     change_root()
+    set_root_password()
     set_hostname()
 
 if __name__ == '__main__':

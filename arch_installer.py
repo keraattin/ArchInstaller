@@ -59,6 +59,8 @@ def manual_partitioning():
 
 def uefi_partitioning():
     os.system("clear")
+
+    #Efi partition
     efi_size = input("Insert EFI partition size [M/MiB - G/GiB] : ")
     if efi_size.find('M') != -1 or efi_size.find('MiB') != -1:
         found_point = efi_size.find('M')
@@ -92,6 +94,7 @@ def uefi_partitioning():
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
 
+    #Boot partition
     boot_size = input("Insert /boot partition size [M/MiB - G/GiB] : ")
     if boot_size.find('M') != -1 or boot_size.find('MiB') != -1:
         found_point = boot_size.find('M')
@@ -125,6 +128,7 @@ def uefi_partitioning():
         print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
         uefi_partitioning() #If wrong format entered, call again itself
 
+    #Swap partition
     swap_size = input("Insert swap partition size [M/MiB - G/GiB] : ")
     if swap_size.find('M') != -1 or swap_size.find('MiB') != -1:
         found_point = swap_size.find('M')
@@ -181,8 +185,93 @@ def uefi_partitioning():
 
 
 def dos_partitioning():
-    #os.system("parted /dev/sda mklabel msdos --script") #Making label to msdos
-    print("auto")
+    os.system("clear")
+
+    #Boot partition
+    boot_size = input("Insert /boot partition size [M/MiB - G/GiB] : ")
+    if boot_size.find('M') != -1 or boot_size.find('MiB') != -1:
+        found_point = boot_size.find('M')
+        boot_part_size = int(boot_size[:found_point])
+        boot_part_type = boot_size[found_point:]
+        boot_sector_start = 2048
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*MEGABYTE)/SECTOR_SIZE)
+        boot_sector = int((int(boot_part_size)*MEGABYTE)/SECTOR_SIZE)
+        boot_part_start = 1
+        boot_part_end = boot_part_start + boot_part_size
+        if boot_part_type == 'M' or boot_part_type == 'MiB':
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong format!"+DEFAULT)
+            dos_partitioning() #If wrong format entered, call again itself
+    elif boot_size.find('G') != -1 or boot_size.find('GiB') != -1:
+        found_point = boot_size.find('G')
+        boot_part_size = int(boot_size[:found_point])
+        boot_part_type = boot_size[found_point:]
+        boot_sector_start = 2048
+        boot_sector_end = boot_sector_start + int((int(boot_part_size)*GIGABYTE)/SECTOR_SIZE)
+        boot_sector = int((int(boot_part_size)*GIGABYTE)/SECTOR_SIZE)
+        boot_part_start = 1
+        boot_part_end = boot_part_start + int(boot_part_size*1024)
+        if boot_part_type == 'G' or boot_part_type == 'GiB':
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong format!"+DEFAULT)
+            dos_partitioning() #If wrong format entered, call again itself
+    else:
+        print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
+        dos_partitioning() #If wrong format entered, call again itself
+
+    #Swap partition
+    swap_size = input("Insert swap partition size [M/MiB - G/GiB] : ")
+    if swap_size.find('M') != -1 or swap_size.find('MiB') != -1:
+        found_point = swap_size.find('M')
+        swap_part_size = int(swap_size[:found_point])
+        swap_part_type = swap_size[found_point:]
+        swap_sector_start = boot_sector_end + 1
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*MEGABYTE)/SECTOR_SIZE)
+        swap_sector = int((int(swap_part_size)*MEGABYTE)/SECTOR_SIZE)
+        swap_part_start = boot_part_end
+        swap_part_end = swap_part_start + swap_part_size
+        if swap_part_type == 'M' or swap_part_type == 'MiB':
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong format!"+DEFAULT)
+            dos_partitioning() #If wrong format entered, call again itself
+    elif swap_size.find('G') != -1 or swap_size.find('GiB') != -1:
+        found_point = swap_size.find('G')
+        swap_part_size = int(swap_size[:found_point])
+        swap_part_type = swap_size[found_point:]
+        swap_sector_start = boot_sector_end + 1
+        swap_sector_end = swap_sector_start + int((int(swap_part_size)*GIGABYTE)/SECTOR_SIZE)
+        swap_sector = int((int(swap_part_size)*GIGABYTE)/SECTOR_SIZE)
+        swap_part_start = boot_part_end
+        swap_part_end = swap_part_start + int(swap_part_size*1024)
+        if swap_part_type == 'G' or swap_part_type == 'GiB':
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong format!"+DEFAULT)
+            dos_partitioning()
+    else:
+        print(RED+"Wrong format entered.\nEnter size like 100M or 100MiB"+DEFAULT)
+        dos_partitioning() #If wrong format entered, call again itself
+
+    print(CYAN+"{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Type","Start","Stop","Start Sector","End Sector","Sector"+DEFAULT))
+    print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Boot",str(boot_part_start),str(boot_part_end),str(boot_sector_start),str(boot_sector_end),str(boot_sector)))
+    print("{:<10s}{:<10s}{:<10s}{:<14s}{:<14s}{:<14s}".format("Swap",str(swap_part_start),str(swap_part_end),str(swap_sector_start),str(swap_sector_end),str(swap_sector)))
+
+    response = input("Are you sure about this configuration? [Y/n]")
+    if response == 'Y' or response == 'y' or response == '':
+        os.system("parted /dev/sda mklabel msdos --script") #Making label to msdos
+        os.system("parted /dev/sda mkpart primary ext2 {}M {}M set 1 boot on --script".format(boot_part_start,boot_part_end)) #Creating boot partition
+        os.system("parted /dev/sda mkpart primary linux-swap {}M {}M --script".format(swap_part_start,swap_part_end)) #Creating swap partition
+        os.system("parted /dev/sda mkpart primary ext4 {}M 100% --script".format(swap_part_end)) #Creating root partition
+
+        #Formatting partitions
+        os.system("yes | mkfs.ext2 /dev/sda1")
+        os.system("yes | mkswap /dev/sda2")
+        os.system("yes | mkfs.ext4 /dev/sda3")
+    else:
+        disk_partitioning()
 
 def auto_partitioning():
     os.system("clear")

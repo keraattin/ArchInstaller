@@ -22,6 +22,13 @@ HOSTNAME = ""
 USERNAME = ""
 PASSWORD = ""
 
+#Volume Informations
+ROOT = ""
+SWAP = ""
+BOOT = ""
+EFI = ""
+
+
 #Welcome message function
 def welcome():
     os.system("clear")
@@ -180,9 +187,13 @@ def uefi_partitioning():
         os.system("yes | mkfs.ext2 /dev/sda2")
         os.system("yes | mkswap /dev/sda3")
         os.system("yes | mkfs.ext4 /dev/sda4")
+
+        ROOT = "/dev/sda4"
+        SWAP = "/dev/sda3"
+        BOOT = "/dev/sda2"
+        EFI = "/dev/sda1"
     else:
         disk_partitioning()
-
 
 def dos_partitioning():
     os.system("clear")
@@ -270,6 +281,10 @@ def dos_partitioning():
         os.system("yes | mkfs.ext2 /dev/sda1")
         os.system("yes | mkswap /dev/sda2")
         os.system("yes | mkfs.ext4 /dev/sda3")
+
+        ROOT = "/dev/sda3"
+        SWAP = "/dev/sda2"
+        BOOT = "/dev/sda1"
     else:
         disk_partitioning()
 

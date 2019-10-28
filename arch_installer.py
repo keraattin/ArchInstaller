@@ -330,12 +330,20 @@ def auto_partitioning():
 
 #Mounting disk volumes to /mnt
 def mount_volume():
-    os.system("mount /dev/sda4 /mnt")
+    #Mounting root
+    os.system("mount {} /mnt".format(ROOT))
+
+    #Mounting boot
     os.system("mkdir /mnt/boot")
-    os.system("mount /dev/sda2 /mnt/boot")
-    os.system("mkdir /mnt/boot/efi")
-    os.system("mount /dev/sda1 /mnt/boot/efi")
-    os.system("swapon /dev/sda3")
+    os.system("mount {} /mnt/boot".format(BOOT))
+
+    #If uefi mod selected, mount efi
+    if EFI:
+        os.system("mkdir /mnt/boot/efi")
+        os.system("mount {} /mnt/boot/efi".format(EFI))
+
+    #Mounting Swap
+    os.system("swapon {}".format(SWAP))
 
 #Setting new password for root
 def set_root_password():

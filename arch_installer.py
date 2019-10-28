@@ -188,9 +188,16 @@ def uefi_partitioning():
         os.system("yes | mkswap /dev/sda3")
         os.system("yes | mkfs.ext4 /dev/sda4")
 
+        global ROOT
         ROOT = "/dev/sda4"
+
+        global SWAP
         SWAP = "/dev/sda3"
+
+        global BOOT
         BOOT = "/dev/sda2"
+
+        global EFI
         EFI = "/dev/sda1"
     else:
         disk_partitioning()
@@ -282,8 +289,13 @@ def dos_partitioning():
         os.system("yes | mkswap /dev/sda2")
         os.system("yes | mkfs.ext4 /dev/sda3")
 
+        global ROOT
         ROOT = "/dev/sda3"
+
+        global SWAP
         SWAP = "/dev/sda2"
+
+        global BOOT
         BOOT = "/dev/sda1"
     else:
         disk_partitioning()

@@ -3,7 +3,7 @@
 import os
 import sys
 import math
-
+import re
 
 #Colors
 DEFAULT = "\33[37m"
@@ -21,6 +21,13 @@ GIGABYTE = math.pow(2,30)
 HOSTNAME = ""
 USERNAME = ""
 PASSWORD = ""
+
+#Volume Informations
+ROOT = ""
+SWAP = ""
+BOOT = ""
+EFI = ""
+
 
 #Welcome message function
 def welcome():
@@ -51,8 +58,39 @@ def manual_partitioning():
     os.system("lsblk")  #Printing out patitions for checking configuration
     response = input("Are you sure about this configuration? [Y/n]")
     if response == 'Y' or response == 'y' or response == '':
-        os.system("clear")
-        return
+        device_pattern = re.compile("\/dev\/sd([a-z][0-9])")
+
+        global ROOT
+        ROOT = input("Please enter the root partition [/dev/sdx] : ")
+        if device_pattern.match(ROOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global SWAP
+        SWAP = input("Please enter the swap partition [/dev/sdx] : ")
+        if device_pattern.match(SWAP):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global BOOT
+        BOOT = input("Please enter the boot partition [/dev/sdx] : ")
+        if device_pattern.match(BOOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global EFI
+        EFI = input("Please enter the efi partition. If not exist skip [/dev/sdx] : ")
+        if device_pattern.match(BOOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"[SKIPPED]"+DEFAULT)
+
     else:
         disk_partitioning()
 
@@ -180,9 +218,20 @@ def uefi_partitioning():
         os.system("yes | mkfs.ext2 /dev/sda2")
         os.system("yes | mkswap /dev/sda3")
         os.system("yes | mkfs.ext4 /dev/sda4")
+
+        global ROOT
+        ROOT = "/dev/sda4"
+
+        global SWAP
+        SWAP = "/dev/sda3"
+
+        global BOOT
+        BOOT = "/dev/sda2"
+
+        global EFI
+        EFI = "/dev/sda1"
     else:
         disk_partitioning()
-
 
 def dos_partitioning():
     os.system("clear")
@@ -270,6 +319,15 @@ def dos_partitioning():
         os.system("yes | mkfs.ext2 /dev/sda1")
         os.system("yes | mkswap /dev/sda2")
         os.system("yes | mkfs.ext4 /dev/sda3")
+
+        global ROOT
+        ROOT = "/dev/sda3"
+
+        global SWAP
+        SWAP = "/dev/sda2"
+
+        global BOOT
+        BOOT = "/dev/sda1"
     else:
         disk_partitioning()
 
@@ -315,12 +373,20 @@ def auto_partitioning():
 
 #Mounting disk volumes to /mnt
 def mount_volume():
-    os.system("mount /dev/sda4 /mnt")
+    #Mounting root
+    os.system("mount {} /mnt".format(ROOT))
+
+    #Mounting boot
     os.system("mkdir /mnt/boot")
-    os.system("mount /dev/sda2 /mnt/boot")
-    os.system("mkdir /mnt/boot/efi")
-    os.system("mount /dev/sda1 /mnt/boot/efi")
-    os.system("swapon /dev/sda3")
+    os.system("mount {} /mnt/boot".format(BOOT))
+
+    #If uefi mod selected, mount efi
+    if EFI:
+        os.system("mkdir /mnt/boot/efi")
+        os.system("mount {} /mnt/boot/efi".format(EFI))
+
+    #Mounting Swap
+    os.system("swapon {}".format(SWAP))
 
 #Setting new password for root
 def set_root_password():

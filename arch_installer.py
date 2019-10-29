@@ -85,14 +85,11 @@ def manual_partitioning():
             manual_partitioning()
 
         global EFI
-        EFI = input("Please enter the efi partition.Press Enter and skip if not exist [/dev/sdx] : ")
-        if EFI == '':
-            print(MAGENTA+"[SKIPPED]")
-        elif device_pattern.match(BOOT):
+        EFI = input("Please enter the efi partition. If not exist skip [/dev/sdx] : ")
+        if device_pattern.match(BOOT):
             print(GREEN+"[OK]"+DEFAULT)
         else:
-            print(RED+"Wrong Format!"+DEFAULT)
-            manual_partitioning()
+            print(RED+"[SKIPPED]"+DEFAULT)
 
     else:
         disk_partitioning()

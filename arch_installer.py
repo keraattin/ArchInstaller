@@ -3,7 +3,7 @@
 import os
 import sys
 import math
-
+import re
 
 #Colors
 DEFAULT = "\33[37m"
@@ -58,8 +58,42 @@ def manual_partitioning():
     os.system("lsblk")  #Printing out patitions for checking configuration
     response = input("Are you sure about this configuration? [Y/n]")
     if response == 'Y' or response == 'y' or response == '':
-        os.system("clear")
-        return
+        device_pattern = re.compile("\/dev\/sd([a-z][0-9])")
+
+        global ROOT
+        ROOT = input("Please enter the root partition [/dev/sdx] : ")
+        if device_pattern.match(ROOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global SWAP
+        SWAP = input("Please enter the swap partition [/dev/sdx] : ")
+        if device_pattern.match(SWAP):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global BOOT
+        BOOT = input("Please enter the boot partition [/dev/sdx] : ")
+        if device_pattern.match(BOOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
+        global EFI
+        EFI = input("Please enter the efi partition.Press Enter and skip if not exist [/dev/sdx] : ")
+        if EFI == '':
+            print(MAGENTA+"[SKIPPED]")
+        elif device_pattern.match(BOOT):
+            print(GREEN+"[OK]"+DEFAULT)
+        else:
+            print(RED+"Wrong Format!"+DEFAULT)
+            manual_partitioning()
+
     else:
         disk_partitioning()
 

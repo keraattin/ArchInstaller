@@ -17,11 +17,6 @@ SECTOR_SIZE = 512   #1 sector 512Byte
 MEGABYTE = math.pow(2,20)
 GIGABYTE = math.pow(2,30)
 
-#User Informations
-HOSTNAME = ""
-USERNAME = ""
-PASSWORD = ""
-
 #Volume Informations
 ROOT = ""
 SWAP = ""
@@ -388,35 +383,9 @@ def mount_volume():
     #Mounting Swap
     os.system("swapon {}".format(SWAP))
 
-#Setting new password for root
-def set_root_password():
-    os.system("clear")
-    root_password = input("\nPlease enter the root password")
-    os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
-
-#Getting new user credentials from user
-def get_user_informations():
-    os.system("clear")
-    print("User Informations")
-    HOSTNAME = input("\nHostname : ")
-    USERNAME = input("\nUsername : ")
-    PASSWORD = input("\nPassword : ")
-
-#Creating new user
-def create_user():
-    os.system("clear")
-    print("Creating user {}".format(USERNAME))
-    os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
-    print(GREEN+"User {} created successfully."+DEFAULT)
-
-#Setting password for new user
-def set_password():
-    os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
-    print(GREEN+"New password created successfully."+DEFAULT)
-
 #Installing base packages to /mnt
 def install_necessarily_packages():
-    os.system("pacstrap /mnt base base-devel grub os-prober")
+    os.system("pacstrap /mnt base base-devel grub os-prober wget git python")
 
 #Generating fstab file for mounted volumes
 def generate_fstab():
@@ -452,14 +421,10 @@ def main():
     welcome()
     disk_partitioning()
     mount_volume()
-    get_user_informations()
     install_necessarily_packages()
     generate_fstab()
     change_root()
-    set_root_password()
-    set_hostname()
-    create_user()
-    set_password()
+
 
 if __name__ == '__main__':
     main()

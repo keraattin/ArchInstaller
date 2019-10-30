@@ -383,12 +383,6 @@ def mount_volume():
     #Mounting Swap
     os.system("swapon {}".format(SWAP))
 
-
-#Setting password for new user
-def set_password():
-    os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
-    print(GREEN+"New password created successfully."+DEFAULT)
-
 #Installing base packages to /mnt
 def install_necessarily_packages():
     os.system("pacstrap /mnt base base-devel grub os-prober")

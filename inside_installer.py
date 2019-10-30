@@ -21,7 +21,6 @@ def set_root_password():
     root_password = input("\nPlease enter the root password")
     os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
 
-
 #Getting new user credentials from user
 def get_user_informations():
     os.system("clear")
@@ -43,10 +42,14 @@ def get_user_informations():
         print(RED+"Wrong format!"+DEFAULT)
         get_user_informations()
 
-
 #Creating new user
 def create_user():
     os.system("clear")
     print("Creating user {}".format(USERNAME))
     os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
     print(GREEN+"User {} created successfully."+DEFAULT)
+
+#Setting password for new user
+def set_password():
+    os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
+    print(GREEN+"New password created successfully."+DEFAULT)

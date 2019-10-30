@@ -42,3 +42,11 @@ def get_user_informations():
     else:
         print(RED+"Wrong format!"+DEFAULT)
         get_user_informations()
+
+
+#Creating new user
+def create_user():
+    os.system("clear")
+    print("Creating user {}".format(USERNAME))
+    os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
+    print(GREEN+"User {} created successfully."+DEFAULT)

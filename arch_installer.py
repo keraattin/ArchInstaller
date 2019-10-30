@@ -17,11 +17,6 @@ SECTOR_SIZE = 512   #1 sector 512Byte
 MEGABYTE = math.pow(2,20)
 GIGABYTE = math.pow(2,30)
 
-#User Informations
-HOSTNAME = ""
-USERNAME = ""
-PASSWORD = ""
-
 #Volume Informations
 ROOT = ""
 SWAP = ""

@@ -421,14 +421,10 @@ def main():
     welcome()
     disk_partitioning()
     mount_volume()
-    get_user_informations()
     install_necessarily_packages()
     generate_fstab()
     change_root()
-    set_root_password()
-    set_hostname()
-    create_user()
-    set_password()
+
 
 if __name__ == '__main__':
     main()

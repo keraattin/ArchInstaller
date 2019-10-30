@@ -53,3 +53,12 @@ def create_user():
 def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
+
+def main():
+    set_root_password()
+    get_user_informations()
+    create_user()
+    set_password()
+
+if __name__ == '__main__':
+    main()

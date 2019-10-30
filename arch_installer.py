@@ -383,19 +383,6 @@ def mount_volume():
     #Mounting Swap
     os.system("swapon {}".format(SWAP))
 
-#Setting new password for root
-def set_root_password():
-    os.system("clear")
-    root_password = input("\nPlease enter the root password")
-    os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
-
-#Getting new user credentials from user
-def get_user_informations():
-    os.system("clear")
-    print("User Informations")
-    HOSTNAME = input("\nHostname : ")
-    USERNAME = input("\nUsername : ")
-    PASSWORD = input("\nPassword : ")
 
 #Creating new user
 def create_user():

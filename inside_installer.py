@@ -84,7 +84,7 @@ def set_keyboard_map():
         set_keyboard_map()
     elif response == '3':
         keyboard_layout = input("Keyboard Layout : ")
-        os.system("echo KEYMAP={} >> /etc/vconsole.conf")
+        os.system("echo KEYMAP={} > /etc/vconsole.conf".format(keyboard_layout))
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         set_keyboard_map()

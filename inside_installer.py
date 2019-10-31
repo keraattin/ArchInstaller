@@ -75,15 +75,15 @@ def set_keyboard_map():
 
     if response == '1':
         os.system("localectl list-keymaps")
-        ret_back = ("Press any key for continue..")
+        ret_back = input("Press any key for continue..")
         set_keyboard_map()
     elif response == '2':
-        search_keyword = ("Enter the keyword you want to search : ")
+        search_keyword = input("Enter the keyword you want to search : ")
         os.system("localectl list-keymaps | grep -i {}".format(search_keyword))
-        ret_back = ("Press any key for continue..")
+        ret_back = input("Press any key for continue..")
         set_keyboard_map()
     elif response == '3':
-        keyboard_layout = ("Keyboard Layout : ")
+        keyboard_layout = input("Keyboard Layout : ")
         os.system("echo KEYMAP={} >> /etc/vconsole.conf")
     else:
         print(RED+"Wrong Selection!"+DEFAULT)

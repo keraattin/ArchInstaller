@@ -53,7 +53,7 @@ def create_user():
     os.system("clear")
     print("Creating user {}".format(USERNAME))
     os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
-    print(GREEN+"User {} created successfully."+DEFAULT)
+    print(GREEN+"User {} created successfully.".format(USERNAME)+DEFAULT)
 
 #Setting password for new user
 def set_password():

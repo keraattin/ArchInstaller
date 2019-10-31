@@ -97,6 +97,7 @@ def main():
     create_user()
     set_password()
     set_hostname()
+    set_keyboard_map()
 
 if __name__ == '__main__':
     main()

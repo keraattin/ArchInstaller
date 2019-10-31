@@ -21,7 +21,7 @@ def set_root_password():
     root_password = input("\nPlease enter the root password : ")
     repeat_root_password = input("\nRoot password again : ")
     if root_password == repeat_root_password:
-        os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
+        os.system("echo -e '{}\n{}' | passwd root".format(root_password,root_password))
         print(GREEN+"New password created successfully for root."+DEFAULT)
     else:
         print(RED+"Passwords not matched!"+DEFAULT)

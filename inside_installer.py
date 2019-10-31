@@ -64,12 +64,40 @@ def set_password():
 def set_hostname():
     os.system("echo {} > /etc/hostname".format(HOSTNAME))
 
+def set_keyboard_map():
+    os.system("clear")
+    print("Keyboard Selection...\n")
+    print("1 - List All Keyboard Layouts\n")
+    print("2 - Search Keyboard Layout\n")
+    print("3 - Set Keyboard Layout\n")
+
+    response = input("Selection [1/2/3] : ")
+
+    if response == '1':
+        os.system("localectl list-keymaps")
+        ret_back = input("Press any key for continue..")
+        set_keyboard_map()
+    elif response == '2':
+        search_keyword = input("Enter the keyword you want to search : ")
+        os.system("localectl list-keymaps | grep -i {}".format(search_keyword))
+        ret_back = input("Press any key for continue..")
+        set_keyboard_map()
+    elif response == '3':
+        keyboard_layout = input("Keyboard Layout : ")
+        os.system("echo KEYMAP={} > /etc/vconsole.conf".format(keyboard_layout))
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        set_keyboard_map()
+
+
+
 def main():
     set_root_password()
     get_user_informations()
     create_user()
     set_password()
     set_hostname()
+    set_keyboard_map()
 
 if __name__ == '__main__':
     main()

@@ -391,9 +391,13 @@ def install_necessarily_packages():
 def generate_fstab():
     os.system("genfstab -U -p >> /mnt >> /mnt/etc/fstab")
 
-#Becoming the root on /mnt
-def change_root():
-    os.system("arch-chroot /mnt /bin/bash")
+#Downloading inside installer to /mnt
+def download_inside_installer():
+    os.system("arch-chroot /mnt wget https://raw.githubusercontent.com/Castlers/ArchInstaller/master/inside_installer.py")
+
+#Executing inside installer on chrooted /mnt
+def execute_inside_installer():
+    os.system("arch-chroot /mnt python inside_installer.py")
 
 # Setting hostname
 def set_hostname():
@@ -423,7 +427,8 @@ def main():
     mount_volume()
     install_necessarily_packages()
     generate_fstab()
-    change_root()
+    download_inside_installer()
+    execute_inside_installer()
 
 
 if __name__ == '__main__':

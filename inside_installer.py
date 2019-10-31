@@ -21,7 +21,7 @@ def set_root_password():
     root_password = input("\nPlease enter the root password : ")
     repeat_root_password = input("\nRoot password again : ")
     if root_password == repeat_root_password:
-        os.system('echo -e {}\n{} | passwd root'.format(root_password,root_password))
+        os.system("echo -e '{}\n{}' | passwd root".format(root_password,root_password))
         print(GREEN+"New password created successfully for root."+DEFAULT)
     else:
         print(RED+"Passwords not matched!"+DEFAULT)
@@ -53,18 +53,23 @@ def create_user():
     os.system("clear")
     print("Creating user {}".format(USERNAME))
     os.system("useradd -m -g users -G wheel,storage,power,network,audio,video,optical -s /bin/bash {}".format(USERNAME))
-    print(GREEN+"User {} created successfully."+DEFAULT)
+    print(GREEN+"User {} created successfully.".format(USERNAME)+DEFAULT)
 
 #Setting password for new user
 def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
+# Setting hostname
+def set_hostname():
+    os.system("echo {} > /etc/hostname".format(HOSTNAME))
+
 def main():
     set_root_password()
     get_user_informations()
     create_user()
     set_password()
+    set_hostname()
 
 if __name__ == '__main__':
     main()

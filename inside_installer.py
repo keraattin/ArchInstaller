@@ -60,11 +60,16 @@ def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
+# Setting hostname
+def set_hostname():
+    os.system("echo {} > /etc/hostname".format(HOSTNAME))
+
 def main():
     set_root_password()
     get_user_informations()
     create_user()
     set_password()
+    set_hostname()
 
 if __name__ == '__main__':
     main()

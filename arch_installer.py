@@ -399,10 +399,6 @@ def download_inside_installer():
 def execute_inside_installer():
     os.system("arch-chroot /mnt python inside_installer.py")
 
-# Setting hostname
-def set_hostname():
-    os.system("echo {} > /etc/hostname".format(HOSTNAME))
-
 #Disk partitioning function
 def disk_partitioning():
     os.system("clear")

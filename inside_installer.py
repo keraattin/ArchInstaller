@@ -60,10 +60,11 @@ def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
-# Setting hostname
+#Setting hostname
 def set_hostname():
     os.system("echo {} > /etc/hostname".format(HOSTNAME))
 
+#Setting keyboard map
 def set_keyboard_map():
     os.system("clear")
     print("Keyboard Selection...\n")
@@ -89,6 +90,7 @@ def set_keyboard_map():
         print(RED+"Wrong Selection!"+DEFAULT)
         set_keyboard_map()
 
+#Setting Localization
 def set_locale():
     os.system("clear")
     print("Language And Localization...\n")
@@ -126,6 +128,7 @@ def main():
     set_password()
     set_hostname()
     set_keyboard_map()
+    set_locale()
 
 if __name__ == '__main__':
     main()

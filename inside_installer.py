@@ -89,7 +89,35 @@ def set_keyboard_map():
         print(RED+"Wrong Selection!"+DEFAULT)
         set_keyboard_map()
 
+def set_locale():
+    os.system("clear")
+    print("Language And Localization...\n")
+    print("1 - List All Languages\n")
+    print("2 - Search Language\n")
+    print("3 - Set Language\n")
+    print("4 - Back (Keyboard Settings)")
 
+    response = input("Selection [1/2/3] : ")
+
+    if response == '1':
+        os.system("more /etc/locale.gen")
+        ret_back = input("Press any key for continue..")
+        set_locale()
+    elif response == '2':
+        search_keyword = input("Enter the keyword you want to search : ")
+        os.system("cat /etc/locale.gen | grep -i {}".format(search_keyword))
+        ret_back = input("Press any key for continue..")
+        set_locale()
+    elif response == '3':
+        system_language = input("Language [tr_TR,en_US] : ")
+        os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
+        os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
+        os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
+    elif response == '4':
+        set_keyboard_map()
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        set_locale()
 
 def main():
     set_root_password()

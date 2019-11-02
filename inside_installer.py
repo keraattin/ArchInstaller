@@ -161,6 +161,7 @@ def main():
     set_hostname()
     set_keyboard_map()
     set_locale()
+    set_timezone()
 
 if __name__ == '__main__':
     main()

@@ -153,6 +153,10 @@ def set_timezone():
         print(RED+"Wrong Selection!"+DEFAULT)
         set_timezone()
 
+#Installing and enabling Network Manager
+def install_network_manager():
+    os.system("yes | pacman -S networkmanager dialog")
+    os.system("systemctl enable NetworkManager")
 
 def main():
     set_root_password()
@@ -163,6 +167,7 @@ def main():
     set_keyboard_map()
     set_locale()
     set_timezone()
+    install_network_manager()
 
 if __name__ == '__main__':
     main()

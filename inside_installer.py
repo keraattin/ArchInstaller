@@ -158,6 +158,10 @@ def install_network_manager():
     os.system("yes | pacman -S networkmanager dialog")
     os.system("systemctl enable NetworkManager")
 
+#Installing Xorg and Utils
+def install_xorg():
+    os.system("echo -e '\n\n' | pacman -S xorg xorg-xinit xorg-xclock xorg-twm xterm mesa alsa alsa-lib alsa-utils dbus")
+
 def main():
     set_root_password()
     get_user_informations()
@@ -168,6 +172,7 @@ def main():
     set_locale()
     set_timezone()
     install_network_manager()
+    install_xorg()
 
 if __name__ == '__main__':
     main()

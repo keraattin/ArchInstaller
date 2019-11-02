@@ -60,10 +60,11 @@ def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
-# Setting hostname
+#Setting hostname
 def set_hostname():
     os.system("echo {} > /etc/hostname".format(HOSTNAME))
 
+#Setting keyboard map
 def set_keyboard_map():
     os.system("clear")
     print("Keyboard Selection...\n")
@@ -89,6 +90,7 @@ def set_keyboard_map():
         print(RED+"Wrong Selection!"+DEFAULT)
         set_keyboard_map()
 
+#Setting Localization
 def set_locale():
     os.system("clear")
     print("Language And Localization...\n")
@@ -97,7 +99,7 @@ def set_locale():
     print("3 - Set Language\n")
     print("4 - Back (Keyboard Settings)")
 
-    response = input("Selection [1/2/3] : ")
+    response = input("Selection [1/2/3/4] : ")
 
     if response == '1':
         os.system("more /etc/locale.gen")
@@ -113,11 +115,44 @@ def set_locale():
         os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
         os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
         os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
+        os.system("locale-gen")
     elif response == '4':
         set_keyboard_map()
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         set_locale()
+
+#Setting Timezone
+def set_timezone():
+    os.system("clear")
+    print("Timezone Selection...\n")
+    print("1 - List All Timezones\n")
+    print("2 - Search Timezone\n")
+    print("3 - Set Timezone\n")
+    print("4 - Back (Language And Localization)")
+
+    response = input("Selection [1/2/3/4] : ")
+
+    if response == '1':
+        os.system("timedatectl list-timezones")
+        ret_back = input("Press any key for continue..")
+        set_timezone()
+    elif response == '2':
+        search_timezone = input("Enter the timezone you want to search : ")
+        os.system("timedatectl list-timezones | grep -i {}".format(search_timezone))
+        ret_back = input("Press any key for continue..")
+        set_timezone()
+    elif response == '3':
+        system_timezone = input("Timezone [Europe/Istanbul] : ")
+        os.system("echo {} > /etc/timezone".format(system_timezone))
+        os.system("ln -s /usr/share/zoneinfo/{} /etc/localtime".format(system_timezone))
+        os.system("hwclock --systohc --utc")
+    elif response == '4':
+        set_locale()
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        set_timezone()
+
 
 def main():
     set_root_password()
@@ -126,6 +161,8 @@ def main():
     set_password()
     set_hostname()
     set_keyboard_map()
+    set_locale()
+    set_timezone()
 
 if __name__ == '__main__':
     main()

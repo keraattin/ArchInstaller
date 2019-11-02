@@ -115,6 +115,7 @@ def set_locale():
         os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
         os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
         os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
+        os.system("locale-gen")
     elif response == '4':
         set_keyboard_map()
     else:

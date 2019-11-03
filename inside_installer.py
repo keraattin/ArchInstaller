@@ -167,6 +167,9 @@ def install_ligthdm():
     os.system("echo -e '\n' | pacman -S lightdm lightdm-gtk-greeter")
     os.system("systemctl enable lightdm")
 
+#Installing Xfce Desktop Manager
+def install_xfce():
+    os.system("echo -e '\n\n' | pacman -S xfce4 xfce4-goodies")
 
 #Desktop Manager Selection
 def select_desktop_manager():
@@ -181,7 +184,10 @@ def select_desktop_manager():
     response = input("Selection [1/2/3/4/5] : ")
 
     if response == '1':
-        print("Xfce")
+        print("Xfce\n")
+        control = input("Installing Xfce, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_xfce()
     elif response == '2':
         print("Lxde")
     elif response == '3':

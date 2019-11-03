@@ -167,6 +167,35 @@ def install_ligthdm():
     os.system("echo -e '\n' | pacman -S lightdm lightdm-gtk-greeter")
     os.system("systemctl enable lightdm")
 
+
+#Desktop Manager Selection
+def select_desktop_manager():
+    os.system("clear")
+    print("Desktop Manager...\n")
+    print("1 - Xfce\n")
+    print("2 - Lxde\n")
+    print("3 - Mate\n")
+    print("4 - KDE\n")
+    print("5 - Gnome\n")
+
+    response = input("Selection [1/2/3/4/5] : ")
+
+    if response == '1':
+        print("Xfce")
+    elif response == '2':
+        print("Lxde")
+    elif response == '3':
+        print("Mate")
+    elif response == '4':
+        print("KDE")
+    elif response == '5':
+        print("Gnome")
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        select_desktop_manager()
+
+
+
 def main():
     set_root_password()
     get_user_informations()

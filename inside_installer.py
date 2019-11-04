@@ -242,6 +242,8 @@ def main():
     install_xorg()
     install_ligthdm()
     add_repositories()
+    install_yaourt()
+    install_utilities()
 
 if __name__ == '__main__':
     main()

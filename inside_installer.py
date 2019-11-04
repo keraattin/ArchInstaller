@@ -221,6 +221,13 @@ def add_repositories():
     os.system("echo '[herecura]' >> /etc/pacman.conf")
     os.system("echo 'Server = http://repo.herecura.be/herecura/x86_64' >> /etc/pacman.conf")
 
+#Installing yaourt
+def install_yaourt():
+    os.system("echo -e '\n' | pacman -Sy yaourt")
+
+#Installing utilities
+def install_utilities():
+    os.system("echo -e '\n' | pacman -S firefox zlib p7zip unzip zip unrar opendesktop-fonts")
 
 def main():
     set_root_password()

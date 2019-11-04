@@ -200,6 +200,26 @@ def select_desktop_manager():
         print(RED+"Wrong Selection!"+DEFAULT)
         select_desktop_manager()
 
+#Adding additional repositories
+def add_repositories():
+    os.system("sed -i '92,93 s/^#//g' /etc/pacman.conf") #Enabling Multilib
+
+    #Archlinuxfr
+    os.system("echo -e '\n' >> /etc/pacman.conf")
+    os.system("echo '[archlinuxfr]' >> /etc/pacman.conf")
+    os.system("echo 'SigLevel = Never' >> /etc/pacman.conf")
+    os.system("echo 'Server = http://repo.archlinux.fr/$arch' >> /etc/pacman.conf")
+
+    #Archlinuxcn
+    os.system("echo -e '\n' >> /etc/pacman.conf")
+    os.system("echo '[archlinuxcn]' >> /etc/pacman.conf")
+    os.system("echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf")
+    os.system("echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf")
+
+    #Herecura
+    os.system("echo -e '\n' >> /etc/pacman.conf")
+    os.system("echo '[herecura]' >> /etc/pacman.conf")
+    os.system("echo 'Server = http://repo.herecura.be/herecura/x86_64' >> /etc/pacman.conf")
 
 
 def main():
@@ -214,6 +234,7 @@ def main():
     install_network_manager()
     install_xorg()
     install_ligthdm()
+    add_repositories()
 
 if __name__ == '__main__':
     main()

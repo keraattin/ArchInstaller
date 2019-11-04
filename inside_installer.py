@@ -60,6 +60,12 @@ def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
+#Adding new user to sudoers file
+def add_user_to_sudoers():
+    os.system("sed -i '82 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
+    os.system("sed -i '85 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
+    os.system("sed -i '88 s/^#//g' /etc/sudoers") #Uncomment sudo
+
 #Setting hostname
 def set_hostname():
     os.system("echo {} > /etc/hostname".format(HOSTNAME))
@@ -241,6 +247,7 @@ def main():
     get_user_informations()
     create_user()
     set_password()
+    add_user_to_sudoers()
     set_hostname()
     set_keyboard_map()
     set_locale()

@@ -221,6 +221,13 @@ def add_repositories():
     os.system("echo '[herecura]' >> /etc/pacman.conf")
     os.system("echo 'Server = http://repo.herecura.be/herecura/x86_64' >> /etc/pacman.conf")
 
+#Updating keyrings
+def update_keyrings():
+    os.system("rm -r /etc/pacman.d/gnupg")
+    os.system("pacman-key --init")
+    os.system("pacman-key --populate archlinux")
+    os.system("pacman -Syyu")
+
 #Installing yaourt
 def install_yaourt():
     os.system("echo -e '\n' | pacman -Sy yaourt")
@@ -242,6 +249,7 @@ def main():
     install_xorg()
     install_ligthdm()
     add_repositories()
+    update_keyrings()
     install_yaourt()
     install_utilities()
 

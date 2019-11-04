@@ -60,6 +60,12 @@ def set_password():
     os.system("echo '{}\n{}' | passwd {} ".format(PASSWORD,PASSWORD,USERNAME))
     print(GREEN+"New password created successfully."+DEFAULT)
 
+#Adding new user to sudoers file
+def add_user_to_sudoers():
+    os.system("sed -i '82 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
+    os.system("sed -i '85 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
+    os.system("sed -i '88 s/^#//g' /etc/sudoers") #Uncomment sudo
+
 #Setting hostname
 def set_hostname():
     os.system("echo {} > /etc/hostname".format(HOSTNAME))
@@ -221,6 +227,13 @@ def add_repositories():
     os.system("echo '[herecura]' >> /etc/pacman.conf")
     os.system("echo 'Server = http://repo.herecura.be/herecura/x86_64' >> /etc/pacman.conf")
 
+#Updating keyrings
+def update_keyrings():
+    os.system("rm -r /etc/pacman.d/gnupg")
+    os.system("pacman-key --init")
+    os.system("pacman-key --populate archlinux")
+    os.system("pacman -Syyu")
+
 #Installing yaourt
 def install_yaourt():
     os.system("echo -e '\n' | pacman -Sy yaourt")
@@ -234,6 +247,7 @@ def main():
     get_user_informations()
     create_user()
     set_password()
+    add_user_to_sudoers()
     set_hostname()
     set_keyboard_map()
     set_locale()
@@ -242,6 +256,7 @@ def main():
     install_xorg()
     install_ligthdm()
     add_repositories()
+    update_keyrings()
     install_yaourt()
     install_utilities()
 

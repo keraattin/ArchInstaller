@@ -62,7 +62,7 @@ def set_password():
 
 #Adding new user to sudoers file
 def add_user_to_sudoers():
-    os.system("sed -i '82 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
+    os.system("sed -i '82 s/^#//g' /etc/sudoers") #Uncomment wheel
     os.system("sed -i '85 s/^#//g' /etc/sudoers") #Uncomment wheel:nopasswd
     os.system("sed -i '88 s/^#//g' /etc/sudoers") #Uncomment sudo
 
@@ -242,6 +242,10 @@ def install_yaourt():
 def install_utilities():
     os.system("echo -e '\n' | pacman -S firefox zlib p7zip unzip zip unrar opendesktop-fonts")
 
+#Mkinit
+def mkinit():
+    os.system("mkinitcpio -p linux")
+
 def main():
     set_root_password()
     get_user_informations()
@@ -259,6 +263,7 @@ def main():
     update_keyrings()
     install_yaourt()
     install_utilities()
+    mkinit()
 
 if __name__ == '__main__':
     main()

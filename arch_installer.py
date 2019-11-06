@@ -385,7 +385,7 @@ def mount_volume():
 
 #Installing base packages to /mnt
 def install_necessarily_packages():
-    os.system("pacstrap /mnt base base-devel grub os-prober wget git python")
+    os.system("pacstrap /mnt base base-devel linux grub os-prober wget git python")
 
 #Generating fstab file for mounted volumes
 def generate_fstab():

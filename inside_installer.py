@@ -246,6 +246,12 @@ def install_utilities():
 def mkinit():
     os.system("mkinitcpio -p linux")
 
+#Installing grub
+def install_grub():
+    os.system("grub-install /dev/sda")
+    os.system("grub-mkconfig -o /boot/grub/grub.cfg")
+    os.system("grub-install --recheck /dev/sda")
+
 def main():
     set_root_password()
     get_user_informations()
@@ -264,6 +270,7 @@ def main():
     install_yaourt()
     install_utilities()
     mkinit()
+    install_grub()
 
 if __name__ == '__main__':
     main()

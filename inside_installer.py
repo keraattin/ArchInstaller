@@ -262,6 +262,7 @@ def main():
     set_keyboard_map()
     set_locale()
     set_timezone()
+    select_desktop_manager()
     install_network_manager()
     install_xorg()
     install_ligthdm()

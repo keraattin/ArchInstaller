@@ -173,6 +173,24 @@ def install_ligthdm():
     os.system("echo -e '\n' | pacman -S lightdm lightdm-gtk-greeter")
     os.system("systemctl enable lightdm")
 
+#Display Manager Selection
+def select_display_manager():
+    os.system("clear")
+    print("Display Manager...\n")
+    print("1 - Lightdm\n")
+
+    response = input("Selection [1/2] : ")
+
+    if response == '1':
+        print("Lightdm\n")
+        control = input("Installing Lightdm, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_ligthdm()
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        select_display_manager()
+
+
 #Installing Xfce Desktop Manager
 def install_xfce():
     os.system("echo -e '\n\n' | pacman -S xfce4 xfce4-goodies")
@@ -262,14 +280,14 @@ def main():
     set_keyboard_map()
     set_locale()
     set_timezone()
-    select_desktop_manager()
     install_network_manager()
     install_xorg()
-    install_ligthdm()
     add_repositories()
     update_keyrings()
     install_yaourt()
     install_utilities()
+    select_display_manager()
+    select_desktop_manager()
     mkinit()
     install_grub()
 

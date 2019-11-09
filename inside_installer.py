@@ -206,17 +206,18 @@ def select_display_manager():
 def install_xfce():
     os.system("echo -e '\n\n' | pacman -S xfce4 xfce4-goodies")
 
+#Installing KDE Desktop Manager
+def install_kde():
+    os.system("echo -e '\n\n\n\n' | pacman -S plasma kdebase")
+
 #Desktop Manager Selection
 def select_desktop_manager():
     os.system("clear")
     print("Desktop Manager...\n")
     print("1 - Xfce\n")
-    print("2 - Lxde\n")
-    print("3 - Mate\n")
-    print("4 - KDE\n")
-    print("5 - Gnome\n")
+    print("2 - KDE\n")
 
-    response = input("Selection [1/2/3/4/5] : ")
+    response = input("Selection [1/2] : ")
 
     if response == '1':
         print("Xfce\n")
@@ -224,13 +225,9 @@ def select_desktop_manager():
         if control == 'Y' or control == 'y' or control == '':
             install_xfce()
     elif response == '2':
-        print("Lxde")
-    elif response == '3':
-        print("Mate")
-    elif response == '4':
-        print("KDE")
-    elif response == '5':
-        print("Gnome")
+        control = input("Installing KDE, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_kde()
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_desktop_manager()

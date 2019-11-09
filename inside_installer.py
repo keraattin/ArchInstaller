@@ -173,11 +173,17 @@ def install_ligthdm():
     os.system("echo -e '\n' | pacman -S lightdm lightdm-gtk-greeter")
     os.system("systemctl enable lightdm")
 
+#Installing Sddm Display Manager
+def install_sddm():
+    os.system("echo -e '\n' | pacman -S sddm")
+    os.system("systemctl enable sddm")
+
 #Display Manager Selection
 def select_display_manager():
     os.system("clear")
     print("Display Manager...\n")
     print("1 - Lightdm\n")
+    print("2 - Sddm")
 
     response = input("Selection [1/2] : ")
 
@@ -186,6 +192,11 @@ def select_display_manager():
         control = input("Installing Lightdm, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
             install_ligthdm()
+    elif response == '2':
+        print("Sddm\n")
+        control = input("Installing Sddm, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_sddm()
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_display_manager()

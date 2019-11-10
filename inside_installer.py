@@ -178,14 +178,20 @@ def install_sddm():
     os.system("echo -e '\n' | pacman -S sddm")
     os.system("systemctl enable sddm")
 
+#Installing Gdm Gnome Display Manager
+def install_gdm():
+    os.system("echo -e '\n' | pacman -S gdm")
+    os.system("systemctl enable gdm")
+
 #Display Manager Selection
 def select_display_manager():
     os.system("clear")
     print("Display Manager...\n")
     print("1 - Lightdm\n")
-    print("2 - Sddm")
+    print("2 - Sddm\n")
+    print("3 - Gdm\n")
 
-    response = input("Selection [1/2] : ")
+    response = input("Selection [1/2/3] : ")
 
     if response == '1':
         print("Lightdm\n")
@@ -197,6 +203,11 @@ def select_display_manager():
         control = input("Installing Sddm, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
             install_sddm()
+    elif response == '3':
+        print("Gdm\n")
+        control = input("Installing Gdm, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_gdm()
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_display_manager()

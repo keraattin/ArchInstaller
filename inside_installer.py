@@ -221,14 +221,19 @@ def install_xfce():
 def install_kde():
     os.system("echo -e '\n\n\n\n' | pacman -S plasma kdebase")
 
+#Installing Gnome Desktop Manager
+def install_gnome():
+    os.system("echo -e '\n\n' | pacman -S gnome gnome-extra")
+
 #Desktop Manager Selection
 def select_desktop_manager():
     os.system("clear")
     print("Desktop Manager...\n")
     print("1 - Xfce\n")
     print("2 - KDE\n")
+    print("3 - Gnome\n")
 
-    response = input("Selection [1/2] : ")
+    response = input("Selection [1/2/3] : ")
 
     if response == '1':
         print("Xfce\n")
@@ -239,6 +244,10 @@ def select_desktop_manager():
         control = input("Installing KDE, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
             install_kde()
+    elif response == '3':
+        control = input("Installing Gnome, are you sure? [Y/n]")
+        if control == 'Y' or control == 'y' or control == '':
+            install_gnome()
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_desktop_manager()

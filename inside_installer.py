@@ -130,13 +130,14 @@ def set_locale():
         system_language = input("Language [tr_TR,en_US] : ")
         try:
             is_valid = subprocess.check_output("cat /etc/locale.gen | grep -w -o -c {}".format(system_language), shell=True)
-            if int(is_valid.rstrip().decode()) > 1:
+            if int(is_valid.rstrip().decode()) >= 1:
                 os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
                 os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
                 os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
                 os.system("locale-gen")
             else:
                 print(RED+"Wrong Localization!"+DEFAULT)
+                set_locale()
         except:
             print(RED+"Wrong Localization!"+DEFAULT)
             set_locale()

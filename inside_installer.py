@@ -127,10 +127,19 @@ def set_locale():
         set_locale()
     elif response == '3':
         system_language = input("Language [tr_TR,en_US] : ")
-        os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
-        os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
-        os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
-        os.system("locale-gen")
+        try:
+            is_valid = subprocess.check_output("cat /etc/locale.gen | grep -w -o -c {}".format(system_language), shell=True)
+            if int(is_valid.rstrip().decode()) > 1:
+                os.system("echo LANG={}.UTF-8 > /etc/locale.conf".format(system_language))
+                os.system("echo LANGUAGE={} >> /etc/locale.conf".format(system_language))
+                os.system("echo LC_ALL=C >> /etc/locale.conf".format(system_language))
+                os.system("locale-gen")
+            else:
+                print(RED+"Wrong Localization!"+DEFAULT)
+        except:
+            print(RED+"Wrong Localization!"+DEFAULT)
+            set_locale()
+
     elif response == '4':
         set_keyboard_map()
     else:

@@ -93,11 +93,12 @@ def set_keyboard_map():
     elif response == '3':
         keyboard_layout = input("Keyboard Layout : ")
         try:
-            is_valid = subprocess.check_output("localectl list-keymaps | grep -w -o -c {}".format(key), shell=True)
+            is_valid = subprocess.check_output("localectl list-keymaps | grep -w -o -c {}".format(keyboard_layout), shell=True)
             if is_valid.rstrip().decode() == '1':
                 os.system("echo KEYMAP={} > /etc/vconsole.conf".format(keyboard_layout))
             else:
                 print(RED+"Wrong Keyboard Map!"+DEFAULT)
+                set_keyboard_map()
         except:
             print(RED+"Wrong Keyboard Map!"+DEFAULT)
             set_keyboard_map()

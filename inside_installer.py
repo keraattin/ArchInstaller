@@ -170,9 +170,15 @@ def set_timezone():
         set_timezone()
     elif response == '3':
         system_timezone = input("Timezone [Europe/Istanbul] : ")
-        os.system("echo {} > /etc/timezone".format(system_timezone))
-        os.system("ln -s /usr/share/zoneinfo/{} /etc/localtime".format(system_timezone))
-        os.system("hwclock --systohc --utc")
+        try:
+            is_valid = subprocess.check_output("timedatectl list-timezones | grep -w -o -c {}".format(system_timezone), shell=True)
+            if is_valid.rstrip().decode() == '1':
+                os.system("echo {} > /etc/timezone".format(system_timezone))
+                os.system("ln -s /usr/share/zoneinfo/{} /etc/localtime".format(system_timezone))
+                os.system("hwclock --systohc --utc")
+        except:
+            print(RED+"Wrong Timezone!"+DEFAULT)
+            set_timezone()
     elif response == '4':
         set_locale()
     else:

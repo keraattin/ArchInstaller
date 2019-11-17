@@ -16,6 +16,10 @@ HOSTNAME = ""
 USERNAME = ""
 PASSWORD = ""
 
+#System Informations
+DISPLAY_MANAGER = ""
+DESKTOP_MANAGER = ""
+
 #Setting new password for root
 def set_root_password():
     os.system("clear")
@@ -251,6 +255,18 @@ def install_kde():
 def install_gnome():
     os.system("echo -e '\n\n' | pacman -S gnome gnome-extra")
 
+#Installing Desktop Manager
+def install_desktop_manager(desktop_manager):
+    if desktop_manager == "xfce":
+        install_xfce()
+    elif desktop_manager == "kde":
+        install_kde()
+    elif desktop_manager == "gnome":
+        install_gnome()
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        select_desktop_manager()
+
 #Desktop Manager Selection
 def select_desktop_manager():
     os.system("clear")
@@ -262,18 +278,20 @@ def select_desktop_manager():
     response = input("Selection [1/2/3] : ")
 
     if response == '1':
-        print("Xfce\n")
         control = input("Installing Xfce, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_xfce()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "xfce"
     elif response == '2':
         control = input("Installing KDE, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_kde()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "kde"
     elif response == '3':
         control = input("Installing Gnome, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_gnome()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "gnome"
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_desktop_manager()

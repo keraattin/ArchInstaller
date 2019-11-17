@@ -213,6 +213,18 @@ def install_gdm():
     os.system("echo -e '\n' | pacman -S gdm")
     os.system("systemctl enable gdm")
 
+#Installing Display Manager
+def install_display_manager(display_manager):
+    if display_manager == "lightdm":
+        install_ligthdm()
+    elif display_manager == "sddm":
+        install_sddm()
+    elif display_manager == "gdm":
+        install_gdm()
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        select_display_manager()
+
 #Display Manager Selection
 def select_display_manager():
     os.system("clear")
@@ -227,17 +239,20 @@ def select_display_manager():
         print("Lightdm\n")
         control = input("Installing Lightdm, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_ligthdm()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "lightdm"
     elif response == '2':
         print("Sddm\n")
         control = input("Installing Sddm, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_sddm()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "sddm"
     elif response == '3':
         print("Gdm\n")
         control = input("Installing Gdm, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            install_gdm()
+            global DISPLAY_MANAGER
+            DISPLAY_MANAGER = "gdm"
     else:
         print(RED+"Wrong Selection!"+DEFAULT)
         select_display_manager()
@@ -280,17 +295,17 @@ def select_desktop_manager():
     if response == '1':
         control = input("Installing Xfce, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            global DISPLAY_MANAGER
+            global DESKTOP_MANAGER
             DISPLAY_MANAGER = "xfce"
     elif response == '2':
         control = input("Installing KDE, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            global DISPLAY_MANAGER
+            global DESKTOP_MANAGER
             DISPLAY_MANAGER = "kde"
     elif response == '3':
         control = input("Installing Gnome, are you sure? [Y/n]")
         if control == 'Y' or control == 'y' or control == '':
-            global DISPLAY_MANAGER
+            global DESKTOP_MANAGER
             DISPLAY_MANAGER = "gnome"
     else:
         print(RED+"Wrong Selection!"+DEFAULT)

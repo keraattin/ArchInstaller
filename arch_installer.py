@@ -360,6 +360,60 @@ def dos_partitioning():
     else:
         disk_partitioning()
 
+#Erase disk and install
+def erase_disk_and_install(partition_type):
+    print("Erase Disk And Install Arch Linux\n")
+    if partition_type == "dos":
+        response = input("Are you sure about this configuration? [Y/n]")
+        if response == 'Y' or response == 'y' or response == '':
+            os.system("parted /dev/sda mklabel msdos --script") #Making label to msdos
+            os.system("parted /dev/sda mkpart primary ext2 1M 100M set 1 boot on --script") #Creating boot partition
+            os.system("parted /dev/sda mkpart primary linux-swap 101M 1100M --script") #Creating swap partition
+            os.system("parted /dev/sda mkpart primary ext4 1101M 100% --script") #Creating root partition
+
+            #Formatting partitions
+            os.system("yes | mkfs.ext2 /dev/sda1")
+            os.system("yes | mkswap /dev/sda2")
+            os.system("yes | mkfs.ext4 /dev/sda3")
+
+            global ROOT
+            ROOT = "/dev/sda3"
+
+            global SWAP
+            SWAP = "/dev/sda2"
+
+            global BOOT
+            BOOT = "/dev/sda1"
+    elif partition_type == "eufi":
+        response = input("Are you sure about this configuration? [Y/n]")
+        if response == 'Y' or response == 'y' or response == '':
+            os.system("parted /dev/sda mklabel gpt --script") #Making label to gpt
+            os.system("parted /dev/sda mkpart primary fat32 1M 101M set 1 esp on --script") #Creating efi partition
+            os.system("parted /dev/sda mkpart primary ext2 101M 300M --script") #Creating boot partition
+            os.system("parted /dev/sda mkpart primary linux-swap 301M 1300M --script") #Creating swap partition
+            os.system("parted /dev/sda mkpart primary ext4 1301M 100% --script") #Creating root partition
+
+            #Formatting partitions
+            os.system("yes | mkfs.vfat -F32 /dev/sda1")
+            os.system("yes | mkfs.ext2 /dev/sda2")
+            os.system("yes | mkswap /dev/sda3")
+            os.system("yes | mkfs.ext4 /dev/sda4")
+
+            global ROOT
+            ROOT = "/dev/sda4"
+
+            global SWAP
+            SWAP = "/dev/sda3"
+
+            global BOOT
+            BOOT = "/dev/sda2"
+
+            global EFI
+            EFI = "/dev/sda1"
+    else:
+        print(RED+"Wrong Selection!"+DEFAULT)
+        auto_partitioning()
+
 #Auto partitioning
 def auto_partitioning():
     os.system("clear")
@@ -370,7 +424,7 @@ def auto_partitioning():
         print("Auto Partitioning -> UEFI\n")
         prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided UEFI Installation\n\n3-Back\n\nSelection[1/2/3] : ")
         if prompt == '1':
-            print()
+            erase_disk_and_install("uefi")
         elif prompt == '2':
             uefi_partitioning()
         elif prompt == '3':
@@ -384,7 +438,7 @@ def auto_partitioning():
         print("Auto Partitioning -> DOS\n")
         prompt = input("1-Erase Disk And Install Arch Linux\n\n2-Guided DOS Installation\n\n3-Back\n\nSelection[1/2/3] : ")
         if prompt == '1':
-            print()
+            erase_disk_and_install("dos")
         elif prompt == '2':
             dos_partitioning()
         elif prompt == '3':

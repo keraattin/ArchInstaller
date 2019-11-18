@@ -46,6 +46,39 @@ def welcome():
     to_continue = input("Press any key to continue..")
     os.system("clear")
 
+#Installing base packages to /mnt
+def install_necessarily_packages():
+    os.system("pacstrap /mnt base base-devel linux grub os-prober wget git python")
+
+#Generating fstab file for mounted volumes
+def generate_fstab():
+    os.system("genfstab -U -p >> /mnt >> /mnt/etc/fstab")
+
+#Downloading inside installer to /mnt
+def download_inside_installer():
+    os.system("arch-chroot /mnt wget https://raw.githubusercontent.com/Castlers/ArchInstaller/master/inside_installer.py")
+
+#Executing inside installer on chrooted /mnt
+def execute_inside_installer():
+    os.system("arch-chroot /mnt python inside_installer.py")
+
+#Mounting disk volumes to /mnt
+def mount_volume():
+    #Mounting root
+    os.system("mount {} /mnt".format(ROOT))
+
+    #Mounting boot
+    os.system("mkdir /mnt/boot")
+    os.system("mount {} /mnt/boot".format(BOOT))
+
+    #If uefi mod selected, mount efi
+    if EFI:
+        os.system("mkdir /mnt/boot/efi")
+        os.system("mount {} /mnt/boot/efi".format(EFI))
+
+    #Mounting Swap
+    os.system("swapon {}".format(SWAP))
+
 #Manual partitioning
 def manual_partitioning():
     os.system("cfdisk") #For manual configuration
@@ -89,7 +122,7 @@ def manual_partitioning():
     else:
         disk_partitioning()
 
-
+#Uefi partitioning
 def uefi_partitioning():
     os.system("clear")
 
@@ -228,6 +261,7 @@ def uefi_partitioning():
     else:
         disk_partitioning()
 
+#Dos partitioning
 def dos_partitioning():
     os.system("clear")
 
@@ -326,6 +360,7 @@ def dos_partitioning():
     else:
         disk_partitioning()
 
+#Auto partitioning
 def auto_partitioning():
     os.system("clear")
     print("Auto Partitioning...\n")
@@ -364,40 +399,6 @@ def auto_partitioning():
         os.system("clear")
         print(RED+"Wrong Selection"+DEFAULT)
         auto_partitioning()
-
-
-#Mounting disk volumes to /mnt
-def mount_volume():
-    #Mounting root
-    os.system("mount {} /mnt".format(ROOT))
-
-    #Mounting boot
-    os.system("mkdir /mnt/boot")
-    os.system("mount {} /mnt/boot".format(BOOT))
-
-    #If uefi mod selected, mount efi
-    if EFI:
-        os.system("mkdir /mnt/boot/efi")
-        os.system("mount {} /mnt/boot/efi".format(EFI))
-
-    #Mounting Swap
-    os.system("swapon {}".format(SWAP))
-
-#Installing base packages to /mnt
-def install_necessarily_packages():
-    os.system("pacstrap /mnt base base-devel linux grub os-prober wget git python")
-
-#Generating fstab file for mounted volumes
-def generate_fstab():
-    os.system("genfstab -U -p >> /mnt >> /mnt/etc/fstab")
-
-#Downloading inside installer to /mnt
-def download_inside_installer():
-    os.system("arch-chroot /mnt wget https://raw.githubusercontent.com/Castlers/ArchInstaller/master/inside_installer.py")
-
-#Executing inside installer on chrooted /mnt
-def execute_inside_installer():
-    os.system("arch-chroot /mnt python inside_installer.py")
 
 #Disk partitioning function
 def disk_partitioning():

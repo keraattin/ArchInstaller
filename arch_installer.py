@@ -413,6 +413,13 @@ def disk_partitioning():
         print(RED+"Wrong Selection"+DEFAULT)
         disk_partitioning()
 
+#Unmount partitions
+def unount_mnt():
+    os.system("umount -R /mnt")
+
+#Unmount swap partition
+def swapoff():
+    os.system("swapoff -a")
 
 def main():
     if os.geteuid() != 0:   #Check whether user have root privileges or not
@@ -425,6 +432,9 @@ def main():
     generate_fstab()
     download_inside_installer()
     execute_inside_installer()
+    unount_mnt()
+    swapoff()
+    os.system("reboot -h now")
 
 
 if __name__ == '__main__':
